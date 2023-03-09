@@ -16,7 +16,7 @@ public class Test {
 		Owner belen = new Owner(1, "Belén", 666666666, "belen@email.com");
 		bellota.setOwner(belen);
 		belen.addDog(bellota);
-		
+		System.out.println("Welcome to the Dog Clinic.");
 		System.out.println(belen);
 	}
 
