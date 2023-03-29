@@ -2,6 +2,8 @@ package dogclinic.pojos;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 // THIS COMMENT IS A TEST FOR GITHUB
@@ -31,9 +33,11 @@ public class Dog implements Serializable {
 	private Date dob; // Date from java.sql
 	private String breed;
 	private Owner owner;
+	private List<Vet> vets;
 	
 	public Dog() {
 		super();
+		vets = new ArrayList<Vet>();
 	}
 
 	
@@ -44,6 +48,8 @@ public class Dog implements Serializable {
 		this.name = name;
 		this.dob = dob;
 		this.breed = breed;
+		vets = new ArrayList<Vet>();
+
 	}
 
 	
@@ -94,6 +100,20 @@ public class Dog implements Serializable {
 	public void setBreed(String breed) {
 		this.breed = breed;
 	}
+	
+	
+
+	public List<Vet> getVets() {
+		return vets;
+	}
+
+
+
+	public void setVets(List<Vet> vets) {
+		this.vets = vets;
+	}
+
+
 
 	@Override
 	public int hashCode() {
