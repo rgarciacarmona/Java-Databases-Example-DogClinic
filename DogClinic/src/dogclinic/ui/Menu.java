@@ -3,20 +3,21 @@ package dogclinic.ui;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import dogclinic.ifaces.OwnerManager;
 import dogclinic.jdbc.JDBCOwnerManager;
 import dogclinic.pojos.Owner;
 
 public class Menu {
-	
+
 	private static BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
 	private static OwnerManager ownerMan;
 
 	public static void main(String[] args) {
 		try {
 			ownerMan = new JDBCOwnerManager();
-			
+
 			System.out.println("Welcome to the DogClinic, dear pet lover!");
 			System.out.println("Choose an option, please:");
 			System.out.println("1. Register a new owner");
@@ -25,14 +26,14 @@ public class Menu {
 			System.out.println("0. Exit");
 
 			int choice = Integer.parseInt(r.readLine());
-			
+
 			switch (choice) {
 			case 1: {
 				registerOwner();
 				break;
 			}
 			case 2: {
-				// TODO Select owner
+				selectOwner();
 				break;
 			}
 			case 3: {
@@ -43,12 +44,12 @@ public class Menu {
 				return;
 			}
 			}
-			
+
 		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
+			System.out.println("You didn't type a number, idiot!");
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			System.out.println("I/O Exception.");
 			e.printStackTrace();
 		}
 
@@ -64,5 +65,20 @@ public class Menu {
 		String email = r.readLine();
 		Owner o = new Owner(name, phone, email);
 		ownerMan.insertOwner(o);
+	}
+	
+	public static void selectOwner() throws IOException {
+		System.out.println("Let's search by name:");
+		String name = r.readLine();
+		List<Owner> listOwn = ownerMan.searchOwnerByName(name);
+		System.out.println(listOwn);
+		System.out.println("Please choose an owner, type its Id:");
+		Integer id = Integer.parseInt(r.readLine());
+		// Go to the owner's menu
+		ownerMenu(id);
+	}
+	
+	public static void ownerMenu(int id) {
+		// TODO Offer the owner options
 	}
 }
