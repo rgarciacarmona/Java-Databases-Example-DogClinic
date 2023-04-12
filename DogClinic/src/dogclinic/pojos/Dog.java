@@ -40,8 +40,6 @@ public class Dog implements Serializable {
 		vets = new ArrayList<Vet>();
 	}
 
-	
-
 	public Dog(Integer id, String name, Date dob, String breed) {
 		super();
 		this.id = id;
@@ -52,14 +50,18 @@ public class Dog implements Serializable {
 
 	}
 
-	
+	public Dog(String name, Date dob, String breed, Owner owner) {
+		super();
+		this.name = name;
+		this.dob = dob;
+		this.breed = breed;
+		this.owner = owner;
+	}
 
 	@Override
 	public String toString() {
 		return "Dog [id=" + id + ", name=" + name + ", dob=" + dob + ", breed=" + breed + "]";
 	}
-
-
 
 	public Owner getOwner() {
 		return owner;

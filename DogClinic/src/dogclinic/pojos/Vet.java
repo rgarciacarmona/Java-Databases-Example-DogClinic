@@ -24,6 +24,25 @@ public class Vet implements Serializable {
 		dogs = new ArrayList<Dog>();
 	}
 
+	public Vet(String name, Integer phone, String email, String speciality) {
+		super();
+		this.name = name;
+		this.phone = phone;
+		this.email = email;
+		this.speciality = speciality;
+		dogs = new ArrayList<Dog>();
+	}
+
+	public Vet(Integer id, String name, Integer phone, String email, String speciality) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.phone = phone;
+		this.email = email;
+		this.speciality = speciality;
+		dogs = new ArrayList<Dog>();
+	}
+
 	public Integer getId() {
 		return id;
 	}
