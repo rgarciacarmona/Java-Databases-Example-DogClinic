@@ -1,6 +1,7 @@
 package dogclinic.jdbc;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dogclinic.ifaces.OwnerManager;
+import dogclinic.pojos.Dog;
 import dogclinic.pojos.Owner;
 
 public class JDBCOwnerManager implements OwnerManager {
@@ -64,7 +66,23 @@ public class JDBCOwnerManager implements OwnerManager {
 
 	@Override
 	public Owner getOwner(int id) {
-		// TODO Write this method
+		try {
+			String sql = "SELECT * FROM owners WHERE id = ?";
+			PreparedStatement p = c.prepareStatement(sql);
+			p.setInt(1, id);
+			ResultSet rs = p.executeQuery();
+			rs.next();
+			String name = rs.getString("name");
+			Integer phone = rs.getInt("phone");
+			String email = rs.getString("email");
+			Owner o = new Owner(id, name, phone, email);
+			rs.close();
+			p.close();
+			return o;
+		} catch (SQLException e) {
+			System.out.println("Database error.");
+			e.printStackTrace();
+		}
 		return null;
 	}
 

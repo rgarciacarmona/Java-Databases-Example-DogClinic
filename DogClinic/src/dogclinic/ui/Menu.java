@@ -22,7 +22,6 @@ public class Menu {
 	private static VetManager vetMan;
 
 	public static void main(String[] args) {
-		// TODO Comment in class, while(true), close connection
 		ConnectionManager conMan = new ConnectionManager();
 		ownerMan = new JDBCOwnerManager(conMan.getConnection());
 		dogMan = new JDBCDogManager(conMan.getConnection());
@@ -143,20 +142,19 @@ public class Menu {
 	}
 
 	public static void registerDog(int id) throws IOException {
-		// TODO Comment in class, search by ID and LocalDate
+		// Register a new Dog and link it with its Owner
 		System.out.println("Please, input the dog's data:");
 		System.out.println("Name:");
 		String name = r.readLine();
 		System.out.println("Date of birth (yyyy-MM-dd):");
 		String dob = r.readLine();
-		LocalDate dobLocalDate = LocalDate.parse(dob, formatter);
-		Date dobDate = Date.valueOf(dobLocalDate);
+		LocalDate dobLocalDate = LocalDate.parse(dob, formatter);		// java.time.LocalDate
+		Date dobDate = Date.valueOf(dobLocalDate);						// java.sql.Date
 		System.out.println("Breed:");
 		String breed = r.readLine();
 		// Get the owner from the database
 		Owner o = ownerMan.getOwner(id);
 		Dog d = new Dog(name, dobDate, breed, o);
-		d.setOwner(o);
 		dogMan.insertDog(d);
 	}
 
@@ -211,7 +209,6 @@ public class Menu {
 	}
 
 	public static void assignVet(int dogId) throws IOException {
-		// TODO Comment in class, many to many relationship
 		System.out.println("Let's search a vet by its name:");
 		String name = r.readLine();
 		List<Vet> listVet = vetMan.searchVetByName(name);
@@ -223,7 +220,6 @@ public class Menu {
 	}
 
 	public static void updateDog(int id) throws IOException {
-		// TODO Comment in class, how to do an update
 		Dog d = dogMan.getDog(id);
 		System.out.println("Type the new data, or press enter to keep actual data");
 		System.out.println("Name (" + d.getName() + "):");
@@ -248,6 +244,7 @@ public class Menu {
 
 	public static void removeDog(int id) throws IOException {
 		dogMan.removeDog(id);
+		System.out.println("The dog has been removed. :(");
 	}
 
 }

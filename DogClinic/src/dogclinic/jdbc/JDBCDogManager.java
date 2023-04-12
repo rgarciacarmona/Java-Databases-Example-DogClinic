@@ -99,12 +99,38 @@ public class JDBCDogManager implements DogManager {
 
 	@Override
 	public void assignDogToVet(int dogId, int vetId) {
-		// TODO Write this method
+		try {
+			String sql = "INSERT INTO dogsVets (dogId, vetId) VALUES (?,?)";
+			PreparedStatement p = c.prepareStatement(sql);
+			p.setInt(1, dogId);
+			p.setInt(2, vetId);
+			p.executeUpdate();
+			p.close();
+		} catch (SQLException e) {
+			System.out.println("Database error.");
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public Dog getDog(int id) {
-		// TODO Write this method
+		try {
+			String sql = "SELECT * FROM dogs WHERE id = ?";
+			PreparedStatement p = c.prepareStatement(sql);
+			p.setInt(1, id);
+			ResultSet rs = p.executeQuery();
+			rs.next();
+			String name = rs.getString("name");
+			Date dob = rs.getDate("dob");
+			String breed = rs.getString("breed");
+			Dog d = new Dog(id, name, dob, breed);
+			rs.close();
+			p.close();
+			return d;
+		} catch (SQLException e) {
+			System.out.println("Database error.");
+			e.printStackTrace();
+		}
 		return null;
 	}
 

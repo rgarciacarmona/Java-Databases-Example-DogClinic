@@ -12,7 +12,6 @@ public interface DogManager {
 	public void updateDog(Dog dog);
 	public void removeDog(int id);
 	public void assignDogToVet(int dogId, int vetId);
-	// TODO Comment in class, new method
 	public Dog getDog(int id);
 
 }

@@ -9,7 +9,6 @@ public class ConnectionManager {
 
 	private Connection c;
 
-	// TODO Comment in class, connection manager
 	public ConnectionManager() {
 		try {
 			Class.forName("org.sqlite.JDBC");
@@ -36,8 +35,8 @@ public class ConnectionManager {
 			String table3 = "CREATE TABLE vets (id INTEGER PRIMARY KEY AUTOINCREMENT," + " name TEXT NOT NULL,"
 					+ " phone INTEGER," + " email TEXT NOT NULL," + " speciality TEXT)";
 			s.executeUpdate(table3);
-			String table4 = "CREATE TABLE dogsVets (" + " dogId INTEGER REFERENCES dogs(id),"
-					+ " vetId INTEGER REFERENCES vets(id))";
+			String table4 = "CREATE TABLE dogsVets (" + " dogId INTEGER REFERENCES dogs(id) ON DELETE CASCADE,"
+					+ " vetId INTEGER REFERENCES vets(id) ON DELETE CASCADE)";
 			s.executeUpdate(table4);
 			s.close();
 		} catch (SQLException e) {
