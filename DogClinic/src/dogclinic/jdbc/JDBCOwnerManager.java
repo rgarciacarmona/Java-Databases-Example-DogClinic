@@ -86,4 +86,26 @@ public class JDBCOwnerManager implements OwnerManager {
 		return null;
 	}
 
+	@Override
+	public Owner getOwnerByEmail(String email) {
+		try {
+			String sql = "SELECT * FROM owners WHERE email = ?";
+			PreparedStatement p = c.prepareStatement(sql);
+			p.setString(1, email);
+			ResultSet rs = p.executeQuery();
+			rs.next();
+			Integer id = rs.getInt("id");
+			String name = rs.getString("name");
+			Integer phone = rs.getInt("phone");
+			Owner o = new Owner(id, name, phone, email);
+			rs.close();
+			p.close();
+			return o;
+		} catch (SQLException e) {
+			System.out.println("Database error.");
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 }

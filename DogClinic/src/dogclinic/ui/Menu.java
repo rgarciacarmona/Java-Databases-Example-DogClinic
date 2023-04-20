@@ -10,6 +10,7 @@ import java.util.List;
 
 import dogclinic.ifaces.*;
 import dogclinic.jdbc.*;
+import dogclinic.jpa.JPAUserManager;
 import dogclinic.pojos.*;
 
 public class Menu {
@@ -20,19 +21,21 @@ public class Menu {
 	private static OwnerManager ownerMan;
 	private static DogManager dogMan;
 	private static VetManager vetMan;
+	private static UserManager userMan;
 
 	public static void main(String[] args) {
 		ConnectionManager conMan = new ConnectionManager();
 		ownerMan = new JDBCOwnerManager(conMan.getConnection());
 		dogMan = new JDBCDogManager(conMan.getConnection());
 		vetMan = new JDBCVetManager(conMan.getConnection());
+		userMan = new JPAUserManager();
 		while (true) {
 			try {
 				System.out.println("Welcome to the DogClinic, dear pet lover!");
 				System.out.println("Choose an option, please:");
-				System.out.println("1. Register a new owner");
-				System.out.println("2. Select an existing owner");
-				System.out.println("3. Register a new vet");
+				System.out.println("1. Register as an owner");
+				System.out.println("2. Register as a vet");
+				System.out.println("3. Login");
 				System.out.println("0. Exit");
 
 				int choice = Integer.parseInt(r.readLine());
@@ -43,11 +46,11 @@ public class Menu {
 					break;
 				}
 				case 2: {
-					selectOwner();
+					registerVet();
 					break;
 				}
 				case 3: {
-					registerVet();
+					login();
 					break;
 				}
 				case 0: {
@@ -67,6 +70,30 @@ public class Menu {
 
 	}
 
+	public static void login() throws IOException {
+		while (true) {
+			// Ask for the username and password
+			System.out.println("Username:");
+			String username = r.readLine();
+			System.out.println("Password:");
+			String password = r.readLine();
+			// If they match, go to the owner screen
+			User user = userMan.login(username, password);
+			if (user != null) {
+				if (user.getRole().getName().equals("owner")) {
+					ownerMenu(user.getEmail());
+				}
+				else if (user.getRole().getName().equals("vet")) {
+					selectVet();
+				}
+			}
+			// It not, ask again
+			else {
+				System.out.println("Wrong username/password combination.");
+			}
+		}
+	}
+
 	public static void registerOwner() throws IOException {
 		System.out.println("Please, input the owner's data:");
 		System.out.println("Name:");
@@ -75,19 +102,31 @@ public class Menu {
 		Integer phone = Integer.parseInt(r.readLine());
 		System.out.println("Email:");
 		String email = r.readLine();
+		System.out.println("Username:");
+		String username = r.readLine();
+		System.out.println("Password:");
+		String password = r.readLine();
 		Owner o = new Owner(name, phone, email);
 		ownerMan.insertOwner(o);
+		User u = new User(username, password, email);
+		userMan.register(u);
+		Role r = userMan.getRole("owner");
+		userMan.assignRole(u, r);
 	}
 
-	public static void selectOwner() throws IOException {
-		System.out.println("Let's search by name:");
-		String name = r.readLine();
-		List<Owner> listOwn = ownerMan.searchOwnerByName(name);
-		System.out.println(listOwn);
-		System.out.println("Please choose an owner, type its Id:");
-		Integer id = Integer.parseInt(r.readLine());
-		// Go to the owner's menu
-		ownerMenu(id);
+//	public static void selectOwner() throws IOException {
+//		System.out.println("Let's search by name:");
+//		String name = r.readLine();
+//		List<Owner> listOwn = ownerMan.searchOwnerByName(name);
+//		System.out.println(listOwn);
+//		System.out.println("Please choose an owner, type its Id:");
+//		Integer id = Integer.parseInt(r.readLine());
+//		// Go to the owner's menu
+//		ownerMenu(id);
+//	}
+	
+	public static void selectVet() throws IOException {
+		// TODO Make this later
 	}
 
 	public static void registerVet() throws IOException {
@@ -104,7 +143,8 @@ public class Menu {
 		vetMan.insertVet(v);
 	}
 
-	public static void ownerMenu(int id) {
+	public static void ownerMenu(String email) {
+		Owner owner = ownerMan.getOwnerByEmail(email);
 		while (true) {
 			try {
 
@@ -118,11 +158,11 @@ public class Menu {
 
 				switch (choice) {
 				case 1: {
-					registerDog(id);
+					registerDog(owner.getId());
 					break;
 				}
 				case 2: {
-					checkDogs(id);
+					checkDogs(owner.getId());
 					break;
 				}
 				case 0: {
@@ -148,8 +188,8 @@ public class Menu {
 		String name = r.readLine();
 		System.out.println("Date of birth (yyyy-MM-dd):");
 		String dob = r.readLine();
-		LocalDate dobLocalDate = LocalDate.parse(dob, formatter);		// java.time.LocalDate
-		Date dobDate = Date.valueOf(dobLocalDate);						// java.sql.Date
+		LocalDate dobLocalDate = LocalDate.parse(dob, formatter); // java.time.LocalDate
+		Date dobDate = Date.valueOf(dobLocalDate); // java.sql.Date
 		System.out.println("Breed:");
 		String breed = r.readLine();
 		// Get the owner from the database
