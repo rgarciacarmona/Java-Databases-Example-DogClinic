@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Owner name="Martina">
+    <phone>444</phone>
+    <email>martina@email.com</email>
+    <Dogs>
+        <Dog name="Thor">
+            <breed>Bulldog</breed>
+            <dob>2010-01-01</dob>
+        </Dog>
+        <Dog name="Freia">
+            <breed>Pupperino</breed>
+            <dob>2010-01-01</dob>
+        </Dog>
+    </Dogs>
+</Owner>

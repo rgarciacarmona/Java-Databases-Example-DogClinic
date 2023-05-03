@@ -6,6 +6,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import dogclinic.xml.SQLDateAdapter;
+
 // THIS COMMENT IS A TEST FOR GITHUB
 // CHANGE CHANGE CHANGE
 
@@ -21,6 +32,8 @@ import java.util.Objects;
 // - toString
 // - Add and Remove
 
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(propOrder = { "breed", "dob" })
 public class Dog implements Serializable {
 
 	/**
@@ -28,11 +41,18 @@ public class Dog implements Serializable {
 	 */
 	private static final long serialVersionUID = -7553144802424898699L;
 	
+	@XmlTransient
 	private Integer id; // Integer can be null
+	@XmlAttribute
 	private String name;
+	@XmlElement
+	@XmlJavaTypeAdapter(SQLDateAdapter.class)
 	private Date dob; // Date from java.sql
+	@XmlElement
 	private String breed;
+	@XmlTransient
 	private Owner owner;
+	@XmlTransient
 	private List<Vet> vets;
 	
 	public Dog() {

@@ -12,6 +12,7 @@ import dogclinic.ifaces.*;
 import dogclinic.jdbc.*;
 import dogclinic.jpa.JPAUserManager;
 import dogclinic.pojos.*;
+import dogclinic.xml.XMLManagerImpl;
 
 public class Menu {
 
@@ -22,6 +23,7 @@ public class Menu {
 	private static DogManager dogMan;
 	private static VetManager vetMan;
 	private static UserManager userMan;
+	private static XMLManager xmlMan = new XMLManagerImpl();
 
 	public static void main(String[] args) {
 		ConnectionManager conMan = new ConnectionManager();
@@ -152,6 +154,7 @@ public class Menu {
 				System.out.println("Choose an option, please:");
 				System.out.println("1. Register a new dog");
 				System.out.println("2. Check my dogs");
+				System.out.println("3. Export my dogs to XML");
 				System.out.println("0. Back to main menu");
 
 				int choice = Integer.parseInt(r.readLine());
@@ -163,6 +166,10 @@ public class Menu {
 				}
 				case 2: {
 					checkDogs(owner.getId());
+					break;
+				}
+				case 3: {
+					dogs2Xml(owner.getId());
 					break;
 				}
 				case 0: {
@@ -206,6 +213,15 @@ public class Menu {
 		Integer dogId = Integer.parseInt(r.readLine());
 		// Go to the owner's menu
 		dogMenu(dogId);
+	}
+	
+	public static void dogs2Xml(int id) throws IOException {
+		System.out.println("Your dogs in XML are:");
+		List<Dog> listDog = dogMan.searchDogByOwner(id);
+		Owner own = ownerMan.getOwner(id);
+		own.setDogs(listDog);
+		// TODO Turn the owner into an XML
+		xmlMan.owner2Xml(own);
 	}
 
 	public static void dogMenu(int id) {
