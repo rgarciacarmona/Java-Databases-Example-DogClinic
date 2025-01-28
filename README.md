@@ -1,5 +1,5 @@
-DogClinic Sample Databases Project
-==================================
+DogClinic
+=========
 
 This is a simple project created during the classes of an undergraduate Databases course,
 intended to teach the students by example how to create a Java project that uses JDBC, JPA
