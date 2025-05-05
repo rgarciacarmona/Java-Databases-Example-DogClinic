@@ -17,9 +17,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import dogclinic.xml.SQLDateAdapter;
 
-// THIS COMMENT IS A TEST FOR GITHUB
-// CHANGE CHANGE CHANGE
-
 // POJO
 // Plain Old Java Object
 // MANDATORY
@@ -143,7 +140,7 @@ public class Dog implements Serializable {
 	}
 
 	@Override
-	public boolean equals(Object obj) { // toby.equals(thor)
+	public boolean equals(Object obj) {
 		if (this == obj) // Checks if both objects have the same memory reference (the same piece of paper)
 			return true;
 		if (obj == null) // If not, checks if the other object is null

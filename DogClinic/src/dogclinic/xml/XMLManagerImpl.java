@@ -28,14 +28,8 @@ public class XMLManagerImpl implements XMLManager {
 
 	@Override
 	public Owner xml2Owner(File xml) {
-		// TODO Auto-generated method stub
+		// TODO Implement the unmarshaller
 		return null;
-	}
-
-	@Override
-	public void owner2Html(Owner o) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

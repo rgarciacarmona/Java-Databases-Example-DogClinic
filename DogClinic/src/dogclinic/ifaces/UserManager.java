@@ -13,4 +13,5 @@ public interface UserManager {
 	public void assignRole(User user, Role role);
 	// If user doesn't exist return null
 	public User login(String name, String password);
+	public void close();
 }

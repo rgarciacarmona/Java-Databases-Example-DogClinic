@@ -57,12 +57,13 @@ public class Menu {
 				}
 				case 0: {
 					conMan.closeConnection();
+					userMan.close();
 					return;
 				}
 				}
 
 			} catch (NumberFormatException e) {
-				System.out.println("You didn't type a number, idiot!");
+				System.out.println("You didn't type a number!");
 				e.printStackTrace();
 			} catch (IOException e) {
 				System.out.println("I/O Exception.");
@@ -70,30 +71,6 @@ public class Menu {
 			}
 		}
 
-	}
-
-	public static void login() throws IOException {
-		while (true) {
-			// Ask for the username and password
-			System.out.println("Username:");
-			String username = r.readLine();
-			System.out.println("Password:");
-			String password = r.readLine();
-			// If they match, go to the owner screen
-			User user = userMan.login(username, password);
-			if (user != null) {
-				if (user.getRole().getName().equals("owner")) {
-					ownerMenu(user.getEmail());
-				}
-				else if (user.getRole().getName().equals("vet")) {
-					selectVet();
-				}
-			}
-			// It not, ask again
-			else {
-				System.out.println("Wrong username/password combination.");
-			}
-		}
 	}
 
 	public static void registerOwner() throws IOException {
@@ -116,21 +93,6 @@ public class Menu {
 		userMan.assignRole(u, r);
 	}
 
-//	public static void selectOwner() throws IOException {
-//		System.out.println("Let's search by name:");
-//		String name = r.readLine();
-//		List<Owner> listOwn = ownerMan.searchOwnerByName(name);
-//		System.out.println(listOwn);
-//		System.out.println("Please choose an owner, type its Id:");
-//		Integer id = Integer.parseInt(r.readLine());
-//		// Go to the owner's menu
-//		ownerMenu(id);
-//	}
-	
-	public static void selectVet() throws IOException {
-		// TODO Make this later
-	}
-
 	public static void registerVet() throws IOException {
 		System.out.println("Please, input the vet's data:");
 		System.out.println("Name:");
@@ -143,6 +105,31 @@ public class Menu {
 		String speciality = r.readLine();
 		Vet v = new Vet(name, phone, email, speciality);
 		vetMan.insertVet(v);
+	}
+	
+
+	public static void login() throws IOException {
+		while (true) {
+			// Ask for the username and password
+			System.out.println("Username:");
+			String username = r.readLine();
+			System.out.println("Password:");
+			String password = r.readLine();
+			// If they match, go to the owner screen
+			User user = userMan.login(username, password);
+			if (user != null) {
+				if (user.getRole().getName().equals("owner")) {
+					ownerMenu(user.getEmail());
+				}
+				else if (user.getRole().getName().equals("vet")) {
+					vetMenu(user.getEmail());
+				}
+			}
+			// It not, ask again
+			else {
+				System.out.println("Wrong username/password combination.");
+			}
+		}
 	}
 
 	public static void ownerMenu(String email) {
@@ -178,7 +165,7 @@ public class Menu {
 				}
 
 			} catch (NumberFormatException e) {
-				System.out.println("You didn't type a number, idiot!");
+				System.out.println("You didn't type a number!");
 				e.printStackTrace();
 			} catch (IOException e) {
 				System.out.println("I/O Exception.");
@@ -203,6 +190,7 @@ public class Menu {
 		Owner o = ownerMan.getOwner(id);
 		Dog d = new Dog(name, dobDate, breed, o);
 		dogMan.insertDog(d);
+		System.out.println("The dog has been saved to the database.");
 	}
 
 	public static void checkDogs(int id) throws IOException {
@@ -211,17 +199,16 @@ public class Menu {
 		System.out.println(listDog);
 		System.out.println("Please choose a dog, type its Id:");
 		Integer dogId = Integer.parseInt(r.readLine());
-		// Go to the owner's menu
+		// Go to the dog's menu
 		dogMenu(dogId);
 	}
 	
 	public static void dogs2Xml(int id) throws IOException {
-		System.out.println("Your dogs in XML are:");
 		List<Dog> listDog = dogMan.searchDogByOwner(id);
 		Owner own = ownerMan.getOwner(id);
 		own.setDogs(listDog);
-		// TODO Turn the owner into an XML
 		xmlMan.owner2Xml(own);
+		System.out.println("Your dogs are in ./xmls/Dogs.xml");
 	}
 
 	public static void dogMenu(int id) {
@@ -271,8 +258,8 @@ public class Menu {
 		System.out.println(listVet);
 		System.out.println("Please choose a vet, type its Id:");
 		Integer vetId = Integer.parseInt(r.readLine());
-		// Go to the owner's menu
 		dogMan.assignDogToVet(dogId, vetId);
+		System.out.println("The dog has been assigned to the vet.");
 	}
 
 	public static void updateDog(int id) throws IOException {
@@ -296,11 +283,17 @@ public class Menu {
 			d.setBreed(breed);
 		}
 		dogMan.updateDog(d);
+		System.out.println("The changes to the dog have been saved.");
 	}
 
 	public static void removeDog(int id) throws IOException {
 		dogMan.removeDog(id);
 		System.out.println("The dog has been removed. :(");
 	}
+
+	public static void vetMenu(String email) throws IOException {
+		// TODO Complete vet's menu
+	}
+
 
 }
